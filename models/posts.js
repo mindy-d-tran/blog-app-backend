@@ -23,11 +23,8 @@ const comment = new mongoose.Schema(
 // subschema for post content
 const post_content = new mongoose.Schema(
   {
-    content: {
-      text: String,
-      img: [String],
-    },
-    required: true,
+    text: String,
+    img: [String],
   },
   { _id: false }
 );
@@ -56,6 +53,7 @@ const postsSchema = new mongoose.Schema(
     },
     post_content: {
       type: post_content,
+      required: true,
     },
     post_hastag: {
       type: [String],
