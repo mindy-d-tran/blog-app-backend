@@ -2,6 +2,7 @@ import { Router } from "express";
 
 //importing model
 import Comment from "../models/comments.js";
+import Post from "../models/posts.js";
 
 const router = new Router();
 
@@ -33,6 +34,11 @@ router.get("/:id", async (req, res) => {
 router.post('/', async(req,res)=>{
     try {
         const newComment = await Comment.create(req.body);
+        const post = await Post.findById(req.body.post_id);
+        if(post) {
+            post.post_comments.push({comment_id: newComment._id});
+            await post.save();
+        }
         res.status(201).send(newComment);
     } catch (error) {
         res
