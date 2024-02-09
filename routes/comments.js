@@ -5,10 +5,23 @@ import Comment from "../models/comments.js";
 
 const router = new Router();
 
+// GET comments
 router.get("/", async (req, res) => {
   try {
     const comments = await Comment.find({});
     res.send(comments);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// GET 1 comment
+router.get("/:id", async (req, res) => {
+  try {
+    const comment = Comment.findById(req.params.id);
+    res.send(comment);
   } catch (error) {
     res
       .status(404)
