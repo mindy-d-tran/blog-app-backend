@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// subschema for user
 const user = new mongoose.Schema(
   {
     user_id: {
@@ -9,6 +10,7 @@ const user = new mongoose.Schema(
   },
   { _id: false }
 );
+// subschema for comment
 const comment = new mongoose.Schema(
   {
     comment_id: {
@@ -18,7 +20,19 @@ const comment = new mongoose.Schema(
   },
   { _id: false }
 );
+// subschema for post content
+const post_content = new mongoose.Schema(
+  {
+    content: {
+      text: String,
+      img: [String],
+    },
+    required: true,
+  },
+  { _id: false }
+);
 
+// Schema
 const postsSchema = new mongoose.Schema(
   {
     user_id: {
@@ -38,13 +52,10 @@ const postsSchema = new mongoose.Schema(
     },
     post_title: {
       type: String,
-      default: ""
+      default: "",
     },
     post_content: {
-      type: {
-        text: String,
-        img: [String],
-      }, required: true
+      type: post_content,
     },
     post_hastag: {
       type: [String],
