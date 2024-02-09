@@ -5,7 +5,6 @@ const user = new mongoose.Schema(
     user_id: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true,
     },
   },
   { _id: false }
@@ -15,7 +14,6 @@ const comment = new mongoose.Schema(
     comment_id: {
       type: mongoose.Schema.ObjectId,
       ref: "Comment",
-      required: true,
     },
   },
   { _id: false }
