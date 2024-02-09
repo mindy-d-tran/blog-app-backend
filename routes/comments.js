@@ -29,4 +29,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// POST (create) new comment
+router.post('/', async(req,res)=>{
+    try {
+        const newComment = await Comment.create(req.body);
+        res.status(201).send(newComment);
+    } catch (error) {
+        res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+    }
+})
 export default router;
