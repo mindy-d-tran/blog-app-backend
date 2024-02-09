@@ -99,26 +99,37 @@ router.put("/:id/update-email/", async (req, res) => {
 });
 
 // PUT (update) user's password
-router.put("/:id/update-password/", async (req, res) => {
+// code from Abraham Tavarez
+// https://github.com/AbeTavarez/cohort107/blob/main/nodejs/mongoose-api/backend/routes/users.js
+router.put("/:id/update-password", async (req, res) => {
   try {
-    // deconstructing
+    const { id } = req.params;
     const { currentPassword, newPassword } = req.body;
 
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).send("user not found");
+    // find the user to update
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ msg: "User not found!" });
 
-    const updateUserPassword = await User.findByIdAndUpdate(
-      user._id,
-      { password: newPassword },
-      {
-        new: true,
-      }
+    // verify the old password with the password hash in db
+    const passwordMatched = await bcrypt.compare(
+      currentPassword,
+      user.password
     );
-    res.send(updateUserPassword);
+    if (!passwordMatched) {
+      return res.status(401).json({ msg: "Authentication Error" });
+    }
+
+    console.log("password matched!");
+
+    // hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // set the old password hash to the newPassword hash
+    await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+    res.json({ msg: "User password updated", user });
   } catch (error) {
-    res
-      .status(404)
-      .json({ msg: "something went wrong", errormsg: error.message });
+    console.log(error);
   }
 });
 
@@ -133,4 +144,5 @@ router.delete("/:id/delete-user", async (req, res) => {
       .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
+
 export default router;
