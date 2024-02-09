@@ -134,7 +134,7 @@ router.put("/:id/update-password", async (req, res) => {
 });
 
 // DELETE user
-router.delete("/:id/delete-user", async (req, res) => {
+router.delete("/:id/", async (req, res) => {
   try {
     const deleteUser = await User.findByIdAndDelete(req.params.id);
     res.json({ msg: "user deleted", deleteUser });
