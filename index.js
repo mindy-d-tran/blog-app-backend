@@ -1,4 +1,5 @@
 import "./loadEnv.js";
+import { conn } from "./db/conn.js"; conn(); 
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
