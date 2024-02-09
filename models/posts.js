@@ -30,22 +30,24 @@ const postsSchema = new mongoose.Schema(
       type: [user],
     },
     post_views: {
-      type: [user],
+      type: Number,
+      default: 0,
     },
     post_comments: {
       type: [comment],
     },
     post_title: {
       type: String,
+      default: ""
     },
     post_content: {
-      type: String,
+      type: {
+        text: String,
+        img: [String],
+      }, required: true
     },
     post_hastag: {
-      type: String,
-    },
-    post_img: {
-      type: String,
+      type: [String],
     },
   },
   {
