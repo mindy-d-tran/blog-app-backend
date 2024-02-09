@@ -1,7 +1,10 @@
 import { Router } from "express";
+import bcrypt from 'bcrypt';
 
 //importing model
 import User from "../models/users.js";
+
+const SALT_ROUNDS = 8;
 
 const router = new Router();
 
@@ -41,7 +44,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id/profile-pic", async (req, res) => {
+// PUT (update) user's profile pic
+router.put("/:id/update-profile-pic", async (req, res) => {
   try {
     const updateUserProfilePic = await User.findByIdAndUpdate(
       req.params.id,
@@ -57,7 +61,9 @@ router.put("/:id/profile-pic", async (req, res) => {
       .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
-router.put("/:id/username/", async (req, res) => {
+
+// PUT (update) user's username
+router.put("/:id/update-username/", async (req, res) => {
   try {
     const updateUserProfilePic = await User.findByIdAndUpdate(
       req.params.id,
@@ -73,4 +79,46 @@ router.put("/:id/username/", async (req, res) => {
       .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
+
+// PUT (update) user's email
+router.put("/:id/update-email/", async (req, res) => {
+  try {
+    const updateUserUsername = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.send(updateUserUsername);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) user's password
+router.put("/:id/update-password/", async (req, res) => {
+  try {
+    // deconstructing
+    const {currentPassword, newPassword} = req.body;
+
+    const user = await User.findById(req.params.id);
+
+    const updateUserPassword = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.send(updateUserPassword);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
 export default router;
