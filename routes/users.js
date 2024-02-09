@@ -24,6 +24,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    if(!user) return res.send("can't find user");
     res.send(user);
   } catch (error) {
     res
