@@ -11,17 +11,21 @@ router.get("/", async (req, res) => {
     const users = await User.find({});
     res.status(200).send(users);
   } catch (error) {
-    res.json(error);
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
 
 // GET single user
 router.get("/:id", async (req, res) => {
   try {
-    const user = User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
     res.send(user);
   } catch (error) {
-    res.send(error);
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
 
@@ -31,11 +35,13 @@ router.post("/", async (req, res) => {
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
-    res.status(404).json({msg: "something went wrong", errormsg: error.message});
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
 
-router.put("/:id/profile-pic/:imgSrc", async (req, res) => {
+router.put("/:id/profile-pic", async (req, res) => {
   try {
     const updateUserProfilePic = await User.findByIdAndUpdate(
       req.params.id,
@@ -46,8 +52,25 @@ router.put("/:id/profile-pic/:imgSrc", async (req, res) => {
     );
     res.send(updateUserProfilePic);
   } catch (error) {
-    res.status(404).json(error);
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
   }
 });
-
+router.put("/:id/username/", async (req, res) => {
+  try {
+    const updateUserProfilePic = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.send(updateUserProfilePic);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
 export default router;
