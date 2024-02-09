@@ -1,5 +1,5 @@
 import { Router } from "express";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 //importing model
 import User from "../models/users.js";
@@ -102,13 +102,14 @@ router.put("/:id/update-email/", async (req, res) => {
 router.put("/:id/update-password/", async (req, res) => {
   try {
     // deconstructing
-    const {currentPassword, newPassword} = req.body;
+    const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).send("user not found");
 
     const updateUserPassword = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+      user._id,
+      { password: newPassword },
       {
         new: true,
       }
@@ -121,4 +122,15 @@ router.put("/:id/update-password/", async (req, res) => {
   }
 });
 
+// DELETE user
+router.delete("/:id/delete-user", async (req, res) => {
+  try {
+    const deleteUser = await User.findByIdAndDelete(req.params.id);
+    res.json({ msg: "user deleted", deleteUser });
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
 export default router;
