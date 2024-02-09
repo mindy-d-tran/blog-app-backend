@@ -27,6 +27,7 @@ const commentsSchema = new mongoose.Schema(
     },
     comment_content: {
       type: String,
+      required: true
     },
   },
   { timestamps: true }
