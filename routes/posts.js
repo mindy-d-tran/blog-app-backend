@@ -22,8 +22,8 @@ router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     // if get post then increase the view by one
-    if (!post) return res.send('post not found');
-      
+    if (!post) return res.send("post not found");
+
     post.post_views++;
     await post.save();
     res.status(200).send(post);
@@ -39,6 +39,18 @@ router.post("/", async (req, res) => {
   try {
     const newPost = await Post.create(req.body);
     res.status(201).send(newPost);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) post
+router.put("/:id", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).send(post);
   } catch (error) {
     res
       .status(404)
