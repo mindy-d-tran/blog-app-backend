@@ -46,10 +46,91 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT (update) post
+// PUT (update) post if they are updating more than 1 item in the post
 router.put("/:id", async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).send(post);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) post's content
+router.put("/:id/update_content", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).send(post);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+// PUT (update) post's content's text
+router.put("/:id/update_content_text", async (req, res) => {
+  try {
+    // find post
+    const post = await Post.findById(req.params.id);
+
+    // update post
+    post.post_content.text = req.body.text;
+    post.save();
+
+    // send final result
+    res.status(200).send(post);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) post's content
+router.put("/:id/update_content_img", async (req, res) => {
+  try {
+    // find post
+    const post = await Post.findById(req.params.id);
+
+    // update post
+    post.post_content.img = req.body.img;
+    post.save();
+
+    // send final result
+    res.status(200).send(post);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) post's title
+router.put("/:id/update_title", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).send(post);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT (update) post's hashtag
+router.put("/:id/update_hashtag", async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.status(200).send(post);
   } catch (error) {
     res
