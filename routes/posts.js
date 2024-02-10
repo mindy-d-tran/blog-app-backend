@@ -46,6 +46,37 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PUT add user to like array (so the ui can show differently)
+router.put("/:id/like", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post) {
+      post.post_likes.push(req.body);
+      await post.save();
+      return res.send({ msg: "user like the post" });
+    }
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// PUT remove user from like array (unlike)
+router.put("/:id/unlike", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post) {
+      post.post_likes.pull(req.body);
+      await post.save();
+      return res.send({ msg: "user unlike the post" });
+    }
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
 // DELETE post
 router.delete("/:id/", async (req, res) => {
   try {
