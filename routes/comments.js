@@ -47,21 +47,37 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PUT add user to like array (so the ui can show differently)
+router.put("/:id/add_like", async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (comment) {
+      comment.comment_like.push({user_id: req.body.user_id});
+      await comment.save();
+      return res.send({ msg: "user like the comment" });
+    }
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
+// DELETE comment
 router.delete("/:id", async (req, res) => {
   try {
     // find comment to find post_id
     const comment = await Comment.findById(req.params.id);
 
-    //find post 
+    //find post
     const post = await Post.findById(comment.post_id);
     // delete the comment from the array
-    post.post_comments.pull({comment_id: req.params.id});
+    post.post_comments.pull({ comment_id: req.params.id });
     await post.save();
 
     // delete comment from database
     const deleteComment = await Comment.findByIdAndDelete(req.params.id);
     res.json({ msg: "comment deleted", deleteComment });
-
   } catch (error) {
     res
       .status(404)
