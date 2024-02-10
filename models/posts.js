@@ -55,7 +55,7 @@ const postsSchema = new mongoose.Schema(
       type: post_content,
       required: true,
     },
-    post_hastag: {
+    post_hashtag: {
       type: [String],
     },
   },
