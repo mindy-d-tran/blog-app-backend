@@ -48,13 +48,28 @@ router.post("/", async (req, res) => {
 });
 
 // PUT add user to like array (so the ui can show differently)
-router.put("/:id/add_like", async (req, res) => {
+router.put("/:id/like", async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
     if (comment) {
-      comment.comment_like.push({user_id: req.body.user_id});
+      comment.comment_like.push(req.body);
       await comment.save();
       return res.send({ msg: "user like the comment" });
+    }
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+// PUT remove user from like array (unlike)
+router.put("/:id/unlike", async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (comment) {
+      comment.comment_like.pull(req.body);
+      await comment.save();
+      return res.send({ msg: "user unlike the comment" });
     }
   } catch (error) {
     res
