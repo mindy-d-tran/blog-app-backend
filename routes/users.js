@@ -23,21 +23,22 @@ router.get("/", async (req, res) => {
 router.get("/login", async (req, res) => {
   try {
     // try to find user by email or username
-    const user =
-      User.find({ username: req.body.username }) ||
-      User.find({ email: req.body.email });
+    const user = await User.findOne({
+      $or: [{ username: req.body.username }, { email: req.body.email }],
+    });
+
     // tell user if the email or username not found in the system
-      if (!user) return res.send("can't find email or username in system");
+    if (!user) return res.send("can't find email or username in system");
 
     // check if password match with user info
     const passwordMatched = await bcrypt.compare(
-      user.password,
-      req.body.password
+      req.body.password, // plaintext password
+      user.password // hash password
     );
     if (!passwordMatched) {
       return res.status(401).json({ msg: "Authentication Error" });
     }
-    
+
     // log in if it is success
     console.log("password matched!");
     res.send("login success");
