@@ -41,7 +41,7 @@ router.put("/login", async (req, res) => {
 
     // log in if it is success
     console.log("password matched!");
-    res.send("login success");
+    res.json(user);
   } catch (error) {
     res
       .status(404)
