@@ -20,15 +20,15 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/login", async (req, res) => {
+router.put("/login", async (req, res) => {
   try {
     // try to find user by email or username
     const user = await User.findOne({
-      $or: [{ username: req.body.username }, { email: req.body.email }],
+      $or: [{ username: req.body.emailOrUsername }, { email: req.body.emailOrUsername }],
     });
 
     // tell user if the email or username not found in the system
-    if (!user) return res.send("can't find email or username in system");
+    if (!user) return res.status(404).send("Can't find email or username in system");
 
     // check if password match with user info
     const passwordMatched = await bcrypt.compare(
@@ -36,7 +36,7 @@ router.get("/login", async (req, res) => {
       user.password // hash password
     );
     if (!passwordMatched) {
-      return res.status(401).json({ msg: "Authentication Error" });
+      return res.status(401).send("Password doesn't match");
     }
 
     // log in if it is success
@@ -65,6 +65,10 @@ router.get("/:id", async (req, res) => {
 // POST (create) new user
 router.post("/", async (req, res) => {
   try {
+    if (await User.findOne({ username: req.body.username }))
+      return res.status(404).send("Username already in use");
+    if (await User.findOne({ email: req.body.email }))
+      return res.status(404).send("Email already in use");
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
