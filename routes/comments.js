@@ -30,6 +30,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/post/:post_id", async (req, res) => {
+  try {
+    const postComments = await Comment.find({post_id: req.params.post_id}).populate('comment_like.user_id');
+    res.send(postComments);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ msg: "something went wrong", errormsg: error.message });
+  }
+});
+
 // POST (create) new comment
 router.post("/", async (req, res) => {
   try {
