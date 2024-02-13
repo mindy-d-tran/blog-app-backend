@@ -32,7 +32,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/post/:post_id", async (req, res) => {
   try {
-    const postComments = await Comment.find({post_id: req.params.post_id}).populate('comment_like.user_id');
+    const postComments = await Comment.find({post_id: req.params.post_id}).populate('user_id');
     res.send(postComments);
   } catch (error) {
     res
