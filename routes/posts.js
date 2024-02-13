@@ -8,7 +8,7 @@ const router = new Router();
 // GET all posts
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("user_id");
+    const posts = await Post.find({}).populate("user_id").populate('post_comments.comment_id');
     res.status(200).send(posts);
   } catch (error) {
     res
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 // GET 1 post
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate('user_id');
+    const post = await Post.findById(req.params.id).populate('user_id').populate('post_comments.comment_id');
     // if get post then increase the view by one
     if (!post) return res.send("post not found");
 
