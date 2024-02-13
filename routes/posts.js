@@ -8,7 +8,7 @@ const router = new Router();
 // GET all posts
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).populate("user_id");
     res.status(200).send(posts);
   } catch (error) {
     res
