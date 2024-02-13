@@ -20,13 +20,13 @@ router.get("/", async (req, res) => {
 // GET 1 post
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('user_id');
     // if get post then increase the view by one
     if (!post) return res.send("post not found");
 
     post.post_views++;
     await post.save();
-    res.status(200).send(post);
+    res.send(post);
   } catch (error) {
     res
       .status(404)
