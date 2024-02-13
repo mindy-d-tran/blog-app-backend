@@ -61,11 +61,11 @@ router.post("/", async (req, res) => {
 // PUT add user to like array (so the ui can show differently)
 router.put("/:id/like", async (req, res) => {
   try {
-    const comment = await Comment.findById(req.params.id);
+    const comment = await Comment.findById(req.params.id).populate('user_id');
     if (comment) {
       comment.comment_like.push(req.body);
       await comment.save();
-      return res.send({ msg: "user like the comment" });
+      return res.send({ msg: "user like the comment" , comment});
     }
   } catch (error) {
     res
@@ -76,11 +76,11 @@ router.put("/:id/like", async (req, res) => {
 // PUT remove user from like array (unlike)
 router.put("/:id/unlike", async (req, res) => {
   try {
-    const comment = await Comment.findById(req.params.id);
+    const comment = await Comment.findById(req.params.id).populate('user_id');
     if (comment) {
       comment.comment_like.pull(req.body);
       await comment.save();
-      return res.send({ msg: "user unlike the comment" });
+      return res.send({ msg: "user unlike the comment", comment });
     }
   } catch (error) {
     res
