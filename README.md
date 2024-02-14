@@ -237,6 +237,7 @@ Updates the post's content's image
     img: [String]
 }
 ```
+
 ### PUT /api/posts/:id/update_title
 
 Updates the post's title
@@ -247,9 +248,10 @@ Updates the post's title
 
 ```
 {
-    post_title: String 
+    post_title: String
 }
 ```
+
 ### PUT /api/posts/:id/update_hashtag
 
 Updates the post's hashtags
@@ -263,6 +265,7 @@ Updates the post's hashtags
     post_hashtag: [String]
 }
 ```
+
 ### PUT /api/posts/:id/like
 
 Updates the post's like (user like the post)
@@ -274,11 +277,62 @@ Updates the post's like (user like the post)
 Updates the post's like (user unlike the post)
 
 - id = post \_id
+
 ### DELETE /api/posts/:id
 
 Delete a post
 
 - id = post \_id
+
+## Comments Route
+
+### GET /api/comments
+
+Reads all comments in the database
+
+### GET /api/comments/:id
+
+Read a single comment's data
+
+- id = comment \_id
+
+### GET /api/comments/post/:post_id
+
+Read all comment's for one post
+
+- post_id = post \_id
+
+### POST /api/comments
+
+Create new comment
+
+#### Body (JSON)
+
+```{
+    user_id: String (required),
+    post_id: String (required),
+    comment_content: String (required)
+}
+```
+
+### PUT /api/comments/:id/like
+
+Updates the comment's like (user like the comment)
+
+- id = comment \_id
+
+### PUT /api/comments/:id/unlike
+
+Updates the comment's like (user unlike the comment)
+
+- id = comment \_id
+
+### DELETE /api/comments/:id/
+
+Delete a comment from the database
+
+- id = comment \_id
+
 # Future Implementations
 
 - Create search route so user's can search for posts through query
