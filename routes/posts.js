@@ -8,7 +8,7 @@ const router = new Router();
 // GET all posts
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("user_id").populate('post_comments.comment_id');
+    const posts = await Post.find({}).sort({createdAt: -1}).populate("user_id").populate('post_comments.comment_id');
     res.status(200).send(posts);
   } catch (error) {
     res
